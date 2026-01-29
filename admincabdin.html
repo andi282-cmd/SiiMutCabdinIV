@@ -173,7 +173,7 @@
         }
 
         .sidebar-menu li a:hover {
-            background-color: #FFD700; /* Kuning */
+            background-color: #FFD700; 
             color: var(--dark);
             border-left-color: #FFD700;
             transform: translateX(5px);
@@ -218,7 +218,7 @@
         }
 
         .sidebar-submenu li a {
-            padding-left: 74px; /* Indent submenu items */
+            padding-left: 74px; 
             font-size: 0.9rem;
             font-weight: 400;
         }
@@ -383,7 +383,7 @@
             color: white;
         }
 
-        /* Main Content Section */
+   
         .data-admin-section {
             background: white;
             border-radius: var(--border-radius);
@@ -473,7 +473,7 @@
         .btn-action.edit:hover { color: var(--primary); }
         .btn-action.delete:hover { color: var(--accent); }
 
-        /* Modal Styles - Dark Mode with Gold Accent */
+    
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -498,7 +498,7 @@
         }
 
         .modal-card {
-            background: #000000; /* Dark blue-gray */
+            background: #000000; 
             width: 100%;
             max-width: 600px;
             border-radius: 15px;
@@ -517,12 +517,12 @@
 
         .modal-header {
             padding: 20px 25px;
-            border-bottom: 1px solid #594e0e74; /* Gold accent */
+            border-bottom: 1px solid #594e0e74; 
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: #18191a; /* Darker header */
-            color: #f1e395; /* Gold accent */
+            background: #18191a; 
+            color: #f1e395; 
             border-radius: 15px 15px 0 0;
         }
 
@@ -562,7 +562,7 @@
             display: block;
             margin-bottom: 8px;
             font-weight: 500;
-            color: #fbf8f8; /* Lighter gray for labels */
+            color: #fbf8f8; 
             font-size: 0.9rem;
         }
 
@@ -582,7 +582,7 @@
 
         .modal-footer {
             padding: 20px 25px;
-            border-top: 1px solid #FFD700; /* Gold accent */
+            border-top: 1px solid #FFD700; 
             display: flex;
             justify-content: flex-end;
             gap: 15px;
@@ -603,13 +603,13 @@
         }
         .modal-footer .btn-secondary:hover { background-color: #5a6268; }
 
-        /* File Upload Styling */
+        /* File Upload  */
         .file-upload-wrapper {
             position: relative;
             width: 150px;
             height: 150px;
             border: 3px dashed #4a627a;
-            border-radius: 50%; /* Make it a circle */
+            border-radius: 50%; 
             display: flex;
             justify-content: center;
             align-items: center;
@@ -617,7 +617,7 @@
             transition: var(--transition);
             background: #34495e;
             overflow: hidden;
-            margin: 0 auto; /* Center the circle */
+            margin: 0 auto; 
         }
 
         .file-upload-wrapper:hover {
@@ -660,7 +660,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            object-fit: cover; /* Ensures the image covers the circle */
+            object-fit: cover; 
             border-radius: 50%;
             z-index: 0;
         }
@@ -763,7 +763,7 @@
         <div class="sidebar-footer">
             <div class="sidebar-user-profile">
                 <div class="user-avatar" id="sidebarUserAvatar">
-                    <!-- Avatar dimuat oleh JS -->
+                    <!-- Avatar dimuat  JS -->
                 </div>
                 <div class="sidebar-user-info">
                     <span class="user-name" id="sidebarUserName">Admin</span>
@@ -996,7 +996,7 @@
     </footer>
 
     <script>
-        // Initialize Supabase
+        // inisial Supabase
         const supabaseUrl = 'https://kbycumhmrnfrsillkqbz.supabase.co';
         const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtieWN1bWhtcm5mcnNpbGxrcWJ6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk1ODQxNjIsImV4cCI6MjA4NTE2MDE2Mn0.-gbbN9cpdfsTTUyQ2Q2znF9KXj-KjOzCqlnSEc-wEYE';
         const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
@@ -1038,7 +1038,6 @@
                 });
             });
 
-            // Auto-expand active dropdown on page load
             const activeDropdown = document.querySelector('.sidebar-menu li.active > .sidebar-submenu');
             if (activeDropdown) {
                 activeDropdown.style.maxHeight = activeDropdown.scrollHeight + "px";
@@ -1062,7 +1061,6 @@
                 modal.classList.add('active');
                 document.body.style.overflow = 'hidden';
                 
-                // Generate Auto ID
                 try {
                     idAdminInput.value = "Sedang memuat...";
                     const { count, error } = await _supabase
@@ -1092,22 +1090,18 @@
             closeModalBtn.addEventListener('click', closeModal);
             cancelBtn.addEventListener('click', closeModal);
 
-            // Close modal when clicking outside
             modal.addEventListener('click', function(e) {
                 if (e.target === modal) {
                     closeModal();
                 }
             });
 
-            // Photo preview logic
             photoInput.addEventListener('change', function(e) {
                 const file = e.target.files[0];
                 if (file) {
                     const reader = new FileReader();
                     reader.onload = function(e) {
-                        // Clear existing content
                         photoPreview.innerHTML = '';
-                        // Create image element
                         const img = document.createElement('img');
                         img.src = e.target.result;
                         photoPreview.appendChild(img);
@@ -1121,12 +1115,10 @@
                 }
             });
 
-            // Auto-fill Username from NIP
             nipInput.addEventListener('input', function() {
                 usernameInput.value = this.value;
             });
 
-            // Toggle Password Visibility
             togglePasswordBtn.addEventListener('click', function() {
                 const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
                 passwordInput.setAttribute('type', type);
@@ -1134,7 +1126,6 @@
                 this.classList.toggle('fa-eye-slash');
             });
 
-            // Save Admin Data
             const saveAdminBtn = document.getElementById('saveAdminBtn');
             
             saveAdminBtn.addEventListener('click', async function() {
@@ -1153,7 +1144,6 @@
                 try {
                     let photoUrl = null;
 
-                    // Upload Photo
                     if (photoInput.files.length > 0) {
                         const file = photoInput.files[0];
                         const fileExt = file.name.split('.').pop();
@@ -1189,7 +1179,7 @@
 
                     alert('Data admin berhasil disimpan!');
                     closeModal();
-                    location.reload(); // Refresh halaman untuk melihat data baru
+                    location.reload(); 
 
                 } catch (err) {
                     console.error('Error:', err);
@@ -1232,7 +1222,6 @@
                 if (e.target === modal) closeModal();
             });
 
-            // Toggle Password
             togglePassBtn.addEventListener('click', function() {
                 const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
                 passwordInput.setAttribute('type', type);
@@ -1240,7 +1229,6 @@
                 this.classList.toggle('fa-eye-slash');
             });
 
-            // Photo Preview
             photoInput.addEventListener('change', function(e) {
                 const file = e.target.files[0];
                 if (file) {
@@ -1255,12 +1243,10 @@
                 }
             });
             
-            // Auto-fill Username from NIP in Edit
             nipInput.addEventListener('input', function() {
                 usernameInput.value = this.value;
             });
 
-            // Update Logic
             updateBtn.addEventListener('click', async function() {
                 if (!namaInput.value || !nipInput.value || !passwordInput.value) {
                     alert('Mohon lengkapi data wajib (Nama, NIP, Password)');
@@ -1273,7 +1259,6 @@
                 try {
                     let newPhotoUrl = currentPhotoUrl;
 
-                    // Upload new photo if selected
                     if (photoInput.files.length > 0) {
                         const file = photoInput.files[0];
                         const fileExt = file.name.split('.').pop();
@@ -1309,7 +1294,7 @@
 
                     alert('Data admin berhasil diupdate!');
                     closeModal();
-                    loadAdminData(); // Refresh table
+                    loadAdminData(); 
 
                 } catch (err) {
                     console.error('Error:', err);
@@ -1320,17 +1305,17 @@
                 }
             });
 
-            // Expose open function globally
+            
             window.openEditAdminModal = async function(id) {
                 modal.classList.add('active');
                 document.body.style.overflow = 'hidden';
                 
-                // Reset form state
+            
                 updateBtn.innerHTML = '<i class="fas fa-save"></i> Update';
                 updateBtn.disabled = false;
-                photoInput.value = ''; // Reset file input
+                photoInput.value = '';
                 
-                // Fetch data
+               
                 try {
                     const { data, error } = await _supabase
                         .from('admincabdin')
@@ -1401,8 +1386,6 @@
                 try {
                     // 1. Hapus Foto dari Bucket Aset jika ada
                     if (deletePhotoUrl) {
-                        // URL format: .../storage/v1/object/public/aset/admin-photos/filename.jpg
-                        // Kita perlu path relatif: admin-photos/filename.jpg
                         const urlParts = deletePhotoUrl.split('/aset/');
                         if (urlParts.length > 1) {
                             const filePath = urlParts[1];
@@ -1435,7 +1418,6 @@
                 }
             });
 
-            // Expose open function globally
             window.openDeleteAdminModal = function(id, name, photo) {
                 deleteId = id;
                 deleteName = name;
@@ -1465,7 +1447,7 @@
                     return;
                 }
 
-                tableBody.innerHTML = ''; // Bersihkan loading
+                tableBody.innerHTML = ''; 
                 data.forEach((admin, index) => {
                     const photoSrc = admin.photo ? admin.photo : 'https://via.placeholder.com/40?text=No+Img';
                     
@@ -1499,7 +1481,6 @@
             const adminPhoto = sessionStorage.getItem('adminPhoto');
             const adminInitial = sessionStorage.getItem('adminInitial');
 
-            // Cek sesi login, jika tidak ada data, kembalikan ke halaman login
             if (!adminNama) {
                 alert('Sesi Anda telah berakhir atau Anda belum login. Silakan login kembali.');
                 window.location.href = 'index.html';
@@ -1511,17 +1492,15 @@
 
             nameEl.textContent = adminNama;
 
-            // Tampilkan foto jika ada, jika tidak, tampilkan inisial nama
             if (adminPhoto && adminPhoto !== 'null' && adminPhoto !== '') {
                 avatarEl.innerHTML = `<img src="${adminPhoto}" alt="Foto ${adminNama}">`;
             } else {
                 avatarEl.innerHTML = `<span>${adminInitial}</span>`;
             }
 
-            // Tambahkan event listener untuk tombol logout untuk membersihkan sesi
             const logoutBtn = document.querySelector('.logout-btn');
             logoutBtn.addEventListener('click', function() {
-                sessionStorage.clear(); // Hapus semua data sesi saat logout
+                sessionStorage.clear(); 
             });
         }
 
@@ -1533,10 +1512,8 @@
             loadAdminData();
             initUserProfile();
 
-            // Event delegation for Edit and Delete buttons
             const tableBody = document.getElementById('adminTableBody');
             tableBody.addEventListener('click', function(e) {
-                // Edit Action
                 const editBtn = e.target.closest('.btn-action.edit');
                 if (editBtn) {
                     const id = editBtn.getAttribute('data-id');
@@ -1545,7 +1522,6 @@
                     }
                 }
 
-                // Delete Action
                 const deleteBtn = e.target.closest('.btn-action.delete');
                 if (deleteBtn) {
                     const id = deleteBtn.getAttribute('data-id');
