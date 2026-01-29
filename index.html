@@ -925,7 +925,7 @@
             z-index: 10;
         }
 
-        /* Notification Styles */
+        /* style notif */
         .notification-card {
             background: white;
             width: 90%;
@@ -1119,7 +1119,6 @@
             }
         }
 
-        /* Documents Section */
         .documents-section {
             background: #FFDCDC;
             border-radius: var(--border-radius);
@@ -1606,7 +1605,6 @@
         </div>
     </div>
 
-    <!-- Notification Modal -->
     <div class="modal-overlay" id="notificationModal" style="z-index: 3000;">
         <div class="notification-card">
             <div class="notification-icon" id="notifIcon"></div>
@@ -1749,7 +1747,6 @@
                 });
             });
             
-            // Tambahkan navigasi dengan keyboard
             document.addEventListener('keydown', function(e) {
                 if (e.key === 'ArrowLeft') {
                     prevBtn.click();
@@ -1850,7 +1847,6 @@
             loadContactData();
         }
 
-        // Custom Notification Function
         function showNotification(type, title, message, callback) {
             const modal = document.getElementById('notificationModal');
             const iconEl = document.getElementById('notifIcon');
@@ -1858,7 +1854,6 @@
             const msgEl = document.getElementById('notifMessage');
             const closeBtn = document.getElementById('closeNotifBtn');
 
-            // Reset classes
             iconEl.className = 'notification-icon';
             if (type === 'success') {
                 iconEl.classList.add('success');
@@ -1872,7 +1867,6 @@
             msgEl.textContent = message;
             modal.classList.add('active');
 
-            // Handle close
             closeBtn.onclick = function() {
                 modal.classList.remove('active');
                 if (callback) callback();
@@ -1916,7 +1910,6 @@
                     if (error) throw error;
 
                     if (data) {
-                        // Simpan data admin ke sessionStorage untuk digunakan di halaman dashboard
                         sessionStorage.setItem('adminNama', data.nama_pegawai);
                         sessionStorage.setItem('adminPhoto', data.photo || '');
                         sessionStorage.setItem('adminInitial', data.nama_pegawai.charAt(0).toUpperCase());
