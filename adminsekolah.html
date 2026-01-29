@@ -173,7 +173,7 @@
         }
 
         .sidebar-menu li a:hover {
-            background-color: #FFD700; /* Kuning */
+            background-color: #FFD700; 
             color: var(--dark);
             border-left-color: #FFD700;
             transform: translateX(5px);
@@ -218,7 +218,7 @@
         }
 
         .sidebar-submenu li a {
-            padding-left: 74px; /* Indent submenu items */
+            padding-left: 74px; 
             font-size: 0.9rem;
             font-weight: 400;
         }
@@ -232,7 +232,6 @@
             color: var(--dark);
         }
 
-        /* Overlay */
         .sidebar-overlay {
             position: fixed;
             top: 0;
@@ -383,7 +382,6 @@
             color: white;
         }
 
-        /* Main Content Section */
         .data-admin-section {
             background: white;
             border-radius: var(--border-radius);
@@ -439,7 +437,7 @@
         .table {
             width: 100%;
             border-collapse: collapse;
-            min-width: 1200px; /* Ensure table scrolls if too wide */
+            min-width: 1200px; 
         }
 
         .table th, .table td {
@@ -476,7 +474,6 @@
         .btn-action.delete:hover { color: var(--accent); }
         .btn-action.download:hover { color: var(--success); }
 
-        /* Modal Styles - Dark Mode with Gold Accent */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -501,9 +498,9 @@
         }
 
         .modal-card {
-            background: #000000; /* Dark blue-gray */
+            background: #000000; 
             width: 100%;
-            max-width: 700px; /* Wider for more fields */
+            max-width: 700px; 
             border-radius: 15px;
             box-shadow: 0 15px 30px rgba(0,0,0,0.3);
             transform: translateY(20px) scale(0.95);
@@ -520,12 +517,12 @@
 
         .modal-header {
             padding: 20px 25px;
-            border-bottom: 1px solid #594e0e74; /* Gold accent */
+            border-bottom: 1px solid #594e0e74; 
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: #18191a; /* Darker header */
-            color: #f1e395; /* Gold accent */
+            background: #18191a; 
+            color: #f1e395; 
             border-radius: 15px 15px 0 0;
         }
 
@@ -571,7 +568,7 @@
             display: block;
             margin-bottom: 8px;
             font-weight: 500;
-            color: #fbf8f8; /* Lighter gray for labels */
+            color: #fbf8f8; 
             font-size: 0.9rem;
         }
 
@@ -589,7 +586,7 @@
 
         .modal-footer {
             padding: 20px 25px;
-            border-top: 1px solid #FFD700; /* Gold accent */
+            border-top: 1px solid #FFD700; 
             display: flex;
             justify-content: flex-end;
             gap: 15px;
@@ -610,13 +607,12 @@
         }
         .modal-footer .btn-secondary:hover { background-color: #5a6268; }
 
-        /* File Upload Styling */
         .file-upload-wrapper {
             position: relative;
             width: 120px;
             height: 120px;
             border: 3px dashed #4a627a;
-            border-radius: 50%; /* Make it a circle */
+            border-radius: 50%; 
             display: flex;
             justify-content: center;
             align-items: center;
@@ -624,7 +620,7 @@
             transition: var(--transition);
             background: #34495e;
             overflow: hidden;
-            margin: 0 auto; /* Center the circle */
+            margin: 0 auto; 
         }
 
         .file-upload-wrapper:hover {
@@ -775,7 +771,6 @@
         <div class="sidebar-footer">
             <div class="sidebar-user-profile">
                 <div class="user-avatar" id="sidebarUserAvatar">
-                    <!-- Avatar dimuat oleh JS -->
                 </div>
                 <div class="sidebar-user-info">
                     <span class="user-name" id="sidebarUserName">Admin</span>
@@ -841,7 +836,6 @@
                             </tr>
                         </thead>
                         <tbody id="adminTableBody">
-                            <!-- Data akan dimuat di sini oleh JavaScript -->
                         </tbody>
                     </table>
                 </div>
@@ -1067,7 +1061,6 @@
     </footer>
 
     <script>
-        // Initialize Supabase
         const supabaseUrl = 'https://kbycumhmrnfrsillkqbz.supabase.co';
         const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtieWN1bWhtcm5mcnNpbGxrcWJ6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk1ODQxNjIsImV4cCI6MjA4NTE2MDE2Mn0.-gbbN9cpdfsTTUyQ2Q2znF9KXj-KjOzCqlnSEc-wEYE';
         const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
@@ -1109,7 +1102,6 @@
                 });
             });
 
-            // Auto-expand active dropdown on page load
             const activeDropdown = document.querySelector('.sidebar-menu li.active > .sidebar-submenu');
             if (activeDropdown) {
                 activeDropdown.style.maxHeight = activeDropdown.scrollHeight + "px";
@@ -1122,7 +1114,6 @@
             const closeModalBtn = document.getElementById('closeAddAdminModal');
             const cancelBtn = document.getElementById('cancelAddAdmin');
             
-            // Inputs
             const idAdminInput = document.getElementById('id_admin');
             const namaInput = document.getElementById('nama_pegawai');
             const nipInput = document.getElementById('nip');
@@ -1149,7 +1140,6 @@
                         .from('adminsekolah')
                         .select('*', { count: 'exact', head: true });
                     
-                    // If table doesn't exist yet, count might be error or 0. Handle gracefully.
                     const nextSequence = (count || 0) + 1;
                     const randomFourDigits = Math.floor(1000 + Math.random() * 9000);
                     const sequenceStr = nextSequence.toString().padStart(3, '0');
@@ -1191,12 +1181,10 @@
                 }
             });
 
-            // Auto-fill Username
             nipInput.addEventListener('input', function() {
                 usernameInput.value = this.value;
             });
 
-            // Toggle Password
             togglePasswordBtn.addEventListener('click', function() {
                 const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
                 passwordInput.setAttribute('type', type);
@@ -1204,7 +1192,6 @@
                 this.classList.toggle('fa-eye-slash');
             });
 
-            // Save Data
             const saveAdminBtn = document.getElementById('saveAdminBtn');
             
             saveAdminBtn.addEventListener('click', async function() {
@@ -1239,7 +1226,6 @@
                         photoUrl = urlData.publicUrl;
                     }
 
-                    // Upload SK PDF
                     if (skInput.files.length > 0) {
                         const file = skInput.files[0];
                         const fileExt = file.name.split('.').pop();
@@ -1297,7 +1283,6 @@
             const cancelBtn = document.getElementById('cancelEditAdmin');
             const updateBtn = document.getElementById('updateAdminBtn');
             
-            // Inputs
             const idInput = document.getElementById('edit_id_admin');
             const namaInput = document.getElementById('edit_nama_pegawai');
             const nipInput = document.getElementById('edit_nip');
@@ -1328,7 +1313,6 @@
                 if (e.target === modal) closeModal();
             });
 
-            // Toggle Password
             togglePassBtn.addEventListener('click', function() {
                 const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
                 passwordInput.setAttribute('type', type);
@@ -1336,7 +1320,6 @@
                 this.classList.toggle('fa-eye-slash');
             });
 
-            // Photo Preview
             photoInput.addEventListener('change', function(e) {
                 const file = e.target.files[0];
                 if (file) {
@@ -1351,7 +1334,6 @@
                 }
             });
 
-            // Auto-fill Username from NIP
             nipInput.addEventListener('input', function() {
                 usernameInput.value = this.value;
             });
@@ -1369,7 +1351,6 @@
                     let newPhotoUrl = currentPhotoUrl;
                     let newSkUrl = currentSkUrl;
 
-                    // Upload new photo if selected
                     if (photoInput.files.length > 0) {
                         const file = photoInput.files[0];
                         const fileExt = file.name.split('.').pop();
@@ -1380,7 +1361,6 @@
                         newPhotoUrl = urlData.publicUrl;
                     }
 
-                    // Upload new SK if selected
                     if (skInput.files.length > 0) {
                         const file = skInput.files[0];
                         const fileExt = file.name.split('.').pop();
@@ -1502,14 +1482,12 @@
                 this.disabled = true;
 
                 try {
-                    // Delete Photo
                     if (deletePhotoUrl) {
                         const urlParts = deletePhotoUrl.split('/aset/');
                         if (urlParts.length > 1) {
                             await _supabase.storage.from('aset').remove([urlParts[1]]);
                         }
                     }
-                    // Delete SK
                     if (deleteSkUrl) {
                         const urlParts = deleteSkUrl.split('/aset/');
                         if (urlParts.length > 1) {
