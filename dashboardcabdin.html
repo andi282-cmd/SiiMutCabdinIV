@@ -442,7 +442,6 @@
             }
         }
 
-        /* Dashboard Stats Grid */
         .dashboard-stats {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
@@ -500,7 +499,6 @@
             margin: 0;
         }
 
-        /* Recent Mutations Section */
         .recent-mutations-section {
             background: white;
             border-radius: var(--border-radius);
@@ -642,7 +640,6 @@
         <div class="sidebar-footer">
             <div class="sidebar-user-profile">
                 <div class="user-avatar" id="sidebarUserAvatar">
-                    <!-- Avatar dimuat oleh JS -->
                 </div>
                 <div class="sidebar-user-info">
                     <span class="user-name" id="sidebarUserName">Admin</span>
@@ -691,7 +688,6 @@
                 <p>Selamat datang, Admin. Di sini Anda dapat mengelola seluruh data mutasi siswa.</p>
             </section>
 
-            <!-- Stats Cards -->
             <div class="dashboard-stats">
                 <div class="stat-card primary">
                     <div class="stat-icon"><i class="fas fa-file-alt"></i></div>
@@ -723,7 +719,6 @@
                 </div>
             </div>
 
-            <!-- Recent Mutations Table -->
             <div class="recent-mutations-section">
                 <div class="section-header">
                     <h3>Pengajuan Mutasi Terbaru</h3>
@@ -867,7 +862,7 @@
             const adminPhoto = sessionStorage.getItem('adminPhoto');
             const adminInitial = sessionStorage.getItem('adminInitial');
 
-            // Cek sesi login, jika tidak ada data, kembalikan ke halaman login
+            // Cek sesi login
             if (!adminNama) {
                 alert('Sesi Anda telah berakhir atau Anda belum login. Silakan login kembali.');
                 window.location.href = 'index.html';
@@ -879,24 +874,23 @@
 
             nameEl.textContent = adminNama;
 
-            // Tampilkan foto jika ada, jika tidak, tampilkan inisial nama
             if (adminPhoto && adminPhoto !== 'null' && adminPhoto !== '') {
                 avatarEl.innerHTML = `<img src="${adminPhoto}" alt="Foto ${adminNama}">`;
             } else {
                 avatarEl.innerHTML = `<span>${adminInitial}</span>`;
             }
 
-            // Tambahkan event listener untuk tombol logout untuk membersihkan sesi
+            // Tambahkan event listener 
             const logoutBtn = document.querySelector('.logout-btn');
             logoutBtn.addEventListener('click', function() {
-                sessionStorage.clear(); // Hapus semua data sesi saat logout
+                sessionStorage.clear(); 
             });
         }
 
         document.addEventListener('DOMContentLoaded', function() {
             setCurrentDate();
             initSidebar();
-            initUserProfile(); // Panggil fungsi untuk memuat profil pengguna
+            initUserProfile(); 
             setInterval(setCurrentDate, 60000);
         });
     </script>
