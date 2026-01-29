@@ -1,0 +1,1003 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Template | SISTEM INFORMASI MANAJEMEN MUTASI SISWA</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --primary-dark: #3a56d4;
+            --secondary: #7209b7;
+            --accent: #f72585;
+            --success: #4cc9f0;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --gray: #6c757d;
+            --light-gray: #e9ecef;
+            --border-radius: 10px;
+            --box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #121212;
+            color: var(--light-gray);
+            line-height: 1.6;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 1.2rem 0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo-icon img {
+            height: 48px;
+            width: 48px;
+            object-fit: contain;
+            display: block;
+            border-radius: 50%;
+        }
+
+        .logo-text h1 {
+            font-size: 1.6rem;
+            font-weight: 700;
+        }
+
+        .logo-text p {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        /* Hamburger Menu */
+        .hamburger-menu {
+            font-size: 1.5rem;
+            color: white;
+            cursor: pointer;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 280px;
+            height: 100%;
+            background: var(--dark);
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            z-index: 1002;
+            transform: translateX(-100%);
+            transition: transform 0.3s ease-in-out;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar.active {
+            transform: translateX(0);
+        }
+
+        .sidebar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.2rem 1.5rem;            
+            background: #1a1a1a;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .sidebar-header h3 {
+            font-size: 1.2rem;
+            margin: 0;
+        }
+
+        .close-sidebar {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.8rem;
+            cursor: pointer;
+            opacity: 0.8;
+            transition: var(--transition);
+        }
+
+        .close-sidebar:hover {
+            opacity: 1;
+            transform: rotate(90deg);
+        }
+
+        .sidebar-menu {
+            list-style: none;
+            padding: 15px 0;
+            flex-grow: 1;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
+        .sidebar-menu li a {
+            display: flex;
+            align-items: center;
+            padding: 14px 24px;            
+            color: var(--light-gray);
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 500;
+            position: relative;
+            border-left: 4px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-menu li a:hover {
+            background-color: #FFD700;
+            color: var(--dark);
+            border-left-color: #FFD700;
+            transform: translateX(5px);
+        }
+
+        .sidebar-menu li a i {
+            width: 30px;
+            font-size: 1.1rem;
+            color: #adb5bd;
+            transition: var(--transition);
+            margin-right: 10px;
+        }
+
+        .sidebar-menu li a:hover i {
+            color: var(--dark);
+        }
+
+        .sidebar-menu li.active > .sidebar-dropdown-toggle {
+            background-color: rgba(255, 215, 0, 0.1);
+            color: #FFD700;
+            border-left-color: #FFD700;
+        }
+
+        .sidebar-dropdown-toggle .dropdown-icon {
+            margin-left: auto;
+            transition: transform 0.3s ease;
+            font-size: 0.8rem;
+        }
+
+        .sidebar-menu li.active > .sidebar-dropdown-toggle .dropdown-icon {
+            transform: rotate(180deg);
+        }
+
+        .sidebar-submenu {
+            list-style: none;
+            padding-left: 0;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+            background: #2c2c2c;
+        }
+
+        .sidebar-submenu li a {
+            padding-left: 74px;
+            font-size: 0.9rem;
+            font-weight: 400;
+        }
+
+        .sidebar-submenu li.active-sub a {
+            background-color: #FFD700;
+            color: var(--dark);
+            transform: translateX(5px);
+        }
+        .sidebar-submenu li.active-sub a i {
+            color: var(--dark);
+        }
+
+        .sidebar-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1001;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+        }
+
+        .sidebar-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .sidebar-footer {
+            margin-top: auto;
+            padding: 20px 15px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar-user-profile {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .sidebar-user-profile .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+        
+        .sidebar-user-profile .user-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+
+        .sidebar-user-info {
+            flex-grow: 1;
+            line-height: 1.3;
+            overflow: hidden;
+        }
+
+        .sidebar-user-info .user-name {
+            font-weight: 600;
+            color: white;
+            display: block;
+            white-space: nowrap;
+        }
+
+        .logout-btn {
+            font-size: 1.3rem;
+            color: var(--light-gray);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .logout-btn:hover {
+            color: var(--accent);
+        }
+
+        /* Main Content */
+        .dashboard {
+            padding: 30px 0 50px;
+            flex-grow: 1;
+        }
+
+        .data-section {
+            background: var(--dark);
+            border-radius: var(--border-radius);
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            border: 1px solid #333;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .section-header h3 {
+            font-size: 1.5rem;
+            color: white;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+        .btn-primary:hover { background-color: var(--primary-dark); }
+
+        .table-responsive {
+            overflow-x: auto;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .table th, .table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #333;
+        }
+
+        .table th {
+            font-weight: 600;
+            color: var(--gray);
+            font-size: 0.9rem;
+            background-color: #1a1a1a;
+        }
+
+        .table td {
+            font-size: 0.95rem;
+            color: var(--light-gray);
+            vertical-align: middle;
+        }
+
+        .table td a.download {
+            color: var(--success);
+        }
+
+        .btn-action {
+            border: none;
+            background: none;
+            cursor: pointer;
+            font-size: 1rem;
+            padding: 5px;
+            transition: var(--transition);
+            color: #adb5bd;
+            text-decoration: none;
+        }
+
+        .btn-action.edit:hover { color: var(--primary); }
+        .btn-action.delete:hover { color: var(--accent); }
+        .btn-action.download:hover { color: var(--success); }
+
+        /* Footer */
+        footer {
+            background: var(--dark);
+            color: white;
+            padding: 25px 0;
+            margin-top: 40px;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .footer-logo i {
+            font-size: 1.8rem;
+            color: var(--success);
+        }
+
+        .copyright {
+            color: var(--light-gray);
+            font-size: 0.9rem;
+        }
+
+        .footer-text {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .footer-agency {
+            font-size: 0.85rem;
+            color: var(--light-gray);
+            margin-top: 5px;
+            line-height: 1.4;
+            font-weight: 300;
+        }
+
+        .footer-right {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 15px;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 12px;
+        }
+
+        .social-icon {
+            width: 38px;
+            height: 38px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .social-icon:hover {
+            background: var(--primary);
+            transform: translateY(-3px);
+            color: white;
+        }
+
+        @media (max-width: 768px) {
+            .header-content, .footer-content {
+                flex-direction: column;
+                gap: 20px;
+                text-align: center;
+            }
+            .footer-right, .footer-logo {
+                align-items: center;
+            }
+        }
+
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 2000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            -webkit-backdrop-filter: blur(5px);
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-card {
+            background: var(--dark);
+            width: 100%;
+            max-width: 600px;
+            border-radius: 15px;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.3);
+            transform: translateY(20px) scale(0.95);
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            display: flex;
+            flex-direction: column;
+            border: 1px solid var(--primary);
+        }
+
+        .modal-overlay.active .modal-card {
+            transform: translateY(0) scale(1);
+        }
+
+        .modal-header {
+            padding: 20px 25px;
+            border-bottom: 1px solid var(--light-gray);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #1a1a1a;
+            color: white;
+            border-radius: 15px 15px 0 0;
+            border-bottom: 1px solid var(--primary);
+        }
+
+        .modal-body {
+            padding: 25px;
+            color: var(--light-gray);
+        }
+
+        .modal-footer {
+            padding: 20px 25px;
+            border-top: 1px solid var(--light-gray);
+            display: flex;
+            justify-content: flex-end;
+            gap: 15px;
+            border-radius: 0 0 15px 15px;
+            background: #1a1a1a;
+            border-top: 1px solid var(--primary);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            color: var(--light-gray);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #444;
+            border-radius: 8px;
+            font-family: 'Poppins', sans-serif;
+            background-color: #1a1a1a;
+            color: white;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            background-color: #212529;
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h3>Menu Utama</h3>
+            <button class="close-sidebar" id="closeSidebar">&times;</button>
+        </div>
+        <ul class="sidebar-menu">
+            <li>
+                <a href="dashboardcabdin.html">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <span>Dashboard</span>
+                </a>
+            </li>
+            <li class="active">
+                <a href="#" class="sidebar-dropdown-toggle">
+                    <i class="fas fa-cogs"></i>
+                    <span>Pengaturan Aplikasi</span>
+                    <i class="fas fa-chevron-down dropdown-icon"></i>
+                </a>
+                <ul class="sidebar-submenu">
+                    <li><a href="profilcabdin.html"><i class="fas fa-university"></i> Identitas Lembaga</a></li>
+                    <li><a href="admincabdin.html"><i class="fas fa-user-shield"></i> Admin Cabdin</a></li>
+                    <li><a href="adminsekolah.html"><i class="fas fa-user-cog"></i> Admin Sekolah</a></li>
+                    <li class="active-sub"><a href="uploadtemplate.html"><i class="fas fa-file-upload"></i> Upload Template Dokumen Mutasi</a></li>
+                </ul>
+            </li>
+            <li>
+                <a href="#">
+                    <i class="fas fa-school"></i>
+                    <span>Data Sekolah</span>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <i class="fas fa-file-import"></i>
+                    <span>Pengajuan Mutasi</span>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <i class="fas fa-bullhorn"></i>
+                    <span>Pengumuman</span>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <i class="fas fa-chart-bar"></i>
+                    <span>Laporan Mutasi</span>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <i class="fas fa-database"></i>
+                    <span>Backup & Reset</span>
+                </a>
+            </li>
+        </ul>
+        <div class="sidebar-footer">
+            <div class="sidebar-user-profile">
+                <div class="user-avatar" id="sidebarUserAvatar">
+                    <!-- Avatar dimuat oleh JS -->
+                </div>
+                <div class="sidebar-user-info">
+                    <span class="user-name" id="sidebarUserName">Admin</span>
+                </div>
+                <a href="index.html" class="logout-btn" title="Logout">
+                    <i class="fas fa-sign-out-alt"></i>
+                </a>
+            </div>
+        </div>
+    </aside>
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <!-- header -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div style="display: flex; align-items: center; gap: 15px;">
+                    <div class="hamburger-menu" id="hamburgerMenu">
+                        <i class="fas fa-bars"></i>
+                    </div>
+                    <div class="logo">
+                        <div class="logo-icon">
+                            <img src="logo.png" alt="Logo" />
+                        </div>
+                        <div class="logo-text">
+                            <h1>SISTEM INFORMASI MANAJEMEN MUTASI SISWA</h1>
+                            <p>Cabang Dinas Wilayah IV - Bangka Barat - Provinsi Kepulauan Bangka Belitung</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- bagian main konten -->
+    <main class="dashboard">
+        <div class="container">
+            <div class="data-section">
+                <div class="section-header">
+                    <h3>Upload Template Dokumen Mutasi</h3>
+                    <div class="action-buttons">
+                         <button class="btn btn-primary" id="uploadTemplateBtn"><i class="fas fa-upload"></i> Upload Template</button>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>Kode Berkas</th>
+                                <th>Nama Berkas</th>
+                                <th>File Template</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="templateTableBody">
+                            <!-- Data akan dimuat di sini oleh JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal Upload Template -->
+    <div class="modal-overlay" id="uploadModal">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3 style="margin:0; font-size:1.2rem;"><i class="fas fa-file-upload"></i> Upload Template Baru</h3>
+                <button id="closeUploadModal" style="background:none; border:none; color:white; font-size:1.5rem; cursor:pointer;">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="uploadForm">
+                    <div class="form-group">
+                        <label for="kodeBerkas" style="display:block; margin-bottom:8px; font-weight:500;">Kode Berkas</label>
+                        <select id="kodeBerkas" class="form-control">
+                            <option value="">-- Pilih Kode Berkas --</option>
+                            <option value="D-01">D-01</option>
+                            <option value="D-02">D-02</option>
+                            <option value="D-03">D-03</option>
+                            <option value="D-04">D-04</option>
+                            <option value="D-05">D-05</option>
+                            <option value="D-06">D-06</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="namaBerkas" style="display:block; margin-bottom:8px; font-weight:500;">Nama Berkas</label>
+                        <input type="text" id="namaBerkas" class="form-control" placeholder="Otomatis terisi..." readonly style="background-color: #2c2c2c; cursor: not-allowed;">
+                    </div>
+                    <div class="form-group">
+                        <label for="fileBerkas" style="display:block; margin-bottom:8px; font-weight:500;">File Template</label>
+                        <input type="file" id="fileBerkas" class="form-control" accept=".doc,.docx,.pdf">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" id="cancelUpload" style="background-color:var(--gray); color:white;">Batal</button>
+                <button type="button" class="btn btn-primary" id="saveUploadBtn">Simpan</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <i class="fas fa-graduation-cap"></i>
+                    <div class="footer-text">
+                        <h3>Sistem Informasi Manajemen Mutasi Murid</h3>
+                        <p class="footer-agency">Cabang Dinas Wilayah IV Bangka Barat<br>Provinsi Kepulauan Bangka Belitung</p>
+                    </div>
+                </div>
+                <div class="footer-right">
+                    <div class="social-links">
+                        <a href="#" class="social-icon" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social-icon" title="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-icon" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+                    </div>
+                    <div class="copyright">
+                        <p>&copy;Kenji Studio Develover.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Inisialisasi Supabase
+        const supabaseUrl = 'https://kbycumhmrnfrsillkqbz.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtieWN1bWhtcm5mcnNpbGxrcWJ6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk1ODQxNjIsImV4cCI6MjA4NTE2MDE2Mn0.-gbbN9cpdfsTTUyQ2Q2znF9KXj-KjOzCqlnSEc-wEYE';
+        const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
+
+        function initSidebar() {
+            const hamburgerMenu = document.getElementById('hamburgerMenu');
+            const sidebar = document.getElementById('sidebar');
+            const closeSidebarBtn = document.getElementById('closeSidebar');
+            const sidebarOverlay = document.getElementById('sidebarOverlay');
+            const dropdownToggles = document.querySelectorAll('.sidebar-dropdown-toggle');
+
+            function openSidebar() {
+                sidebar.classList.add('active');
+                sidebarOverlay.classList.add('active');
+            }
+
+            function closeSidebar() {
+                sidebar.classList.remove('active');
+                sidebarOverlay.classList.remove('active');
+            }
+
+            hamburgerMenu.addEventListener('click', openSidebar);
+            closeSidebarBtn.addEventListener('click', closeSidebar);
+            sidebarOverlay.addEventListener('click', closeSidebar);
+
+            dropdownToggles.forEach(toggle => {
+                toggle.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const parentLi = this.parentElement;
+                    const submenu = this.nextElementSibling;
+                    
+                    parentLi.classList.toggle('active');
+                    
+                    if (submenu.style.maxHeight) {
+                        submenu.style.maxHeight = null;
+                    } else {
+                        submenu.style.maxHeight = submenu.scrollHeight + "px";
+                    }
+                });
+            });
+
+            // Auto-expand active dropdown on page load
+            const activeDropdown = document.querySelector('.sidebar-menu li.active > .sidebar-submenu');
+            if (activeDropdown) {
+                activeDropdown.style.maxHeight = activeDropdown.scrollHeight + "px";
+            }
+        }
+
+        function initUserProfile() {
+            const adminNama = sessionStorage.getItem('adminNama');
+            const adminPhoto = sessionStorage.getItem('adminPhoto');
+            const adminInitial = sessionStorage.getItem('adminInitial');
+
+            // Cek sesi login, jika tidak ada data, kembalikan ke halaman login
+            if (!adminNama) {
+                alert('Sesi Anda telah berakhir atau Anda belum login. Silakan login kembali.');
+                window.location.href = 'index.html';
+                return;
+            }
+
+            const avatarEl = document.getElementById('sidebarUserAvatar');
+            const nameEl = document.getElementById('sidebarUserName');
+
+            nameEl.textContent = adminNama;
+
+            // Tampilkan foto jika ada, jika tidak, tampilkan inisial nama
+            if (adminPhoto && adminPhoto !== 'null' && adminPhoto !== '') {
+                avatarEl.innerHTML = `<img src="${adminPhoto}" alt="Foto ${adminNama}">`;
+            } else {
+                avatarEl.innerHTML = `<span>${adminInitial}</span>`;
+            }
+
+            // Tambahkan event listener untuk tombol logout untuk membersihkan sesi
+            const logoutBtn = document.querySelector('.logout-btn');
+            logoutBtn.addEventListener('click', function() {
+                sessionStorage.clear(); // Hapus semua data sesi saat logout
+            });
+        }
+
+        function initUploadModal() {
+            const modal = document.getElementById('uploadModal');
+            const btnOpen = document.getElementById('uploadTemplateBtn');
+            const btnClose = document.getElementById('closeUploadModal');
+            const btnCancel = document.getElementById('cancelUpload');
+            const kodeSelect = document.getElementById('kodeBerkas');
+            const saveBtn = document.getElementById('saveUploadBtn');
+            const namaInput = document.getElementById('namaBerkas');
+
+            // Mapping Data Kode ke Nama Berkas
+            const berkasMap = {
+                'D-01': 'Surat Permohonan Mutasi',
+                'D-02': 'Surat Keterangan Formasi dan Persetujuan',
+                'D-03': 'Surat Pernyataan Pengunduran Diri/Mutasi',
+                'D-04': 'Surat Keterangan Pindah/Mutasi Keluar',
+                'D-05': 'Surat Pengantar',
+                'D-06': 'Surat Keterangan Berkelakuan Baik'
+            };
+
+            // Event Listener untuk Dropdown
+            kodeSelect.addEventListener('change', function() {
+                const selectedCode = this.value;
+                if (berkasMap[selectedCode]) {
+                    namaInput.value = berkasMap[selectedCode];
+                } else {
+                    namaInput.value = '';
+                }
+            });
+
+            // Fungsi Buka/Tutup Modal
+            function openModal() {
+                modal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+
+            function closeModal() {
+                modal.classList.remove('active');
+                document.body.style.overflow = 'auto';
+                // Reset form saat tutup
+                document.getElementById('uploadForm').reset();
+                namaInput.value = '';
+            }
+
+            btnOpen.addEventListener('click', openModal);
+            btnClose.addEventListener('click', closeModal);
+            btnCancel.addEventListener('click', closeModal);
+            
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) closeModal();
+            });
+
+            // Logika Simpan Data
+            saveBtn.addEventListener('click', async function() {
+                const kodeValue = kodeSelect.value;
+                const namaValue = namaInput.value;
+                const fileInput = document.getElementById('fileBerkas');
+                const file = fileInput.files[0];
+
+                if (!kodeValue || !namaValue || !file) {
+                    alert('Mohon lengkapi semua field: Kode Berkas, dan pilih File Template.');
+                    return;
+                }
+
+                this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Menyimpan...';
+                this.disabled = true;
+
+                try {
+                    // 1. Upload file ke storage
+                    const fileExt = file.name.split('.').pop();
+                    const fileName = `template-dokumen/${kodeValue}-${Date.now()}.${fileExt}`;
+
+                    const { error: uploadError } = await _supabase.storage
+                        .from('aset')
+                        .upload(fileName, file);
+
+                    if (uploadError) throw uploadError;
+
+                    // 2. Dapatkan URL publik
+                    const { data: urlData } = _supabase.storage
+                        .from('aset')
+                        .getPublicUrl(fileName);
+                    
+                    const fileUrl = urlData.publicUrl;
+
+                    // 3. Simpan data ke tabel 'uploadtemplate'
+                    const { error: insertError } = await _supabase
+                        .from('uploadtemplate')
+                        .upsert({
+                            kode_berkas: kodeValue,
+                            nama_berkas: namaValue,
+                            file_berkas: fileUrl
+                        }, { onConflict: 'kode_berkas' });
+
+                    if (insertError) throw insertError;
+
+                    alert('Template berhasil disimpan!');
+                    closeModal();
+                    loadTemplateData(); // Muat ulang data tabel
+
+                } catch (err) {
+                    console.error('Error saving template:', err);
+                    alert('Gagal menyimpan template: ' + err.message);
+                } finally {
+                    this.innerHTML = 'Simpan';
+                    this.disabled = false;
+                }
+            });
+        }
+
+        async function loadTemplateData() {
+            const tableBody = document.getElementById('templateTableBody');
+            tableBody.innerHTML = '<tr><td colspan="5" style="text-align:center;">Memuat data...</td></tr>';
+
+            try {
+                const { data, error } = await _supabase
+                    .from('uploadtemplate')
+                    .select('*')
+                    .order('kode_berkas', { ascending: true });
+
+                if (error) throw error;
+
+                if (!data || data.length === 0) {
+                    tableBody.innerHTML = '<tr><td colspan="5" style="text-align:center;">Belum ada template yang diupload.</td></tr>';
+                    return;
+                }
+
+                tableBody.innerHTML = ''; // Bersihkan loading
+                data.forEach((template, index) => {
+                    const fileIcon = template.file_berkas.endsWith('.pdf') ? 'fa-file-pdf' : 'fa-file-word';
+                    const fileName = decodeURIComponent(template.file_berkas.split('/').pop());
+
+                    const row = `
+                        <tr>
+                            <td>${index + 1}</td>
+                            <td>${template.kode_berkas}</td>
+                            <td>${template.nama_berkas}</td>
+                            <td><a href="${template.file_berkas}" target="_blank" class="btn-action download" title="Download"><i class="fas ${fileIcon}"></i> ${fileName}</a></td>
+                            <td>
+                                <button class="btn-action edit" title="Edit" data-id="${template.kode_berkas}"><i class="fas fa-edit"></i></button>
+                                <button class="btn-action delete" title="Hapus" data-id="${template.kode_berkas}"><i class="fas fa-trash"></i></button>
+                            </td>
+                        </tr>
+                    `;
+                    tableBody.innerHTML += row;
+                });
+
+            } catch (err) {
+                console.error('Gagal memuat data template:', err);
+                tableBody.innerHTML = `<tr><td colspan="5" style="text-align:center; color: var(--accent);">Gagal memuat data: ${err.message}</td></tr>`;
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            initSidebar();
+            initUserProfile();
+            initUploadModal();
+            loadTemplateData();
+        });
+    </script>
+</body>
+</html>
