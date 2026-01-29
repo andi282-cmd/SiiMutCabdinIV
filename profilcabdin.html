@@ -376,7 +376,6 @@
             color: white;
         }
 
-        /* Profile Form Section */
         .profile-section {
             background: white;
             border-radius: var(--border-radius);
@@ -492,7 +491,6 @@
             border: 1px solid #ced4da;
         }
 
-        /* Input Group for Map */
         .input-group {
             display: flex;
             gap: 10px;
@@ -519,7 +517,6 @@
             background: var(--primary);
         }
 
-        /* Map Picker Modal */
         .map-modal {
             position: fixed;
             top: 0;
@@ -577,7 +574,6 @@
             gap: 10px;
         }
 
-        /* Notification Modal */
         .notification-modal {
             position: fixed;
             top: 0;
@@ -713,7 +709,6 @@
         <div class="sidebar-footer">
             <div class="sidebar-user-profile">
                 <div class="user-avatar" id="sidebarUserAvatar">
-                    <!-- Avatar dimuat oleh JS -->
                 </div>
                 <div class="sidebar-user-info">
                     <span class="user-name" id="sidebarUserName">Admin</span>
@@ -840,7 +835,6 @@
         </div>
     </footer>
 
-    <!-- Map Picker Modal -->
     <div class="map-modal" id="mapModal">
         <div class="map-modal-content">
             <div class="map-modal-header">
@@ -857,7 +851,6 @@
         </div>
     </div>
 
-    <!-- Notification Modal -->
     <div class="notification-modal" id="notificationModal">
         <div class="notification-content">
             <div style="font-size: 3rem; color: var(--accent); margin-bottom: 15px;"><i class="fas fa-exclamation-circle"></i></div>
@@ -917,13 +910,13 @@
 
             let map;
             let marker;
-            let selectedLat = -2.066667; // Default Muntok
+            let selectedLat = -2.066667; 
             let selectedLng = 105.166667;
 
             function openModal() {
                 mapModal.classList.add('active');
                 
-                // Initialize map if not already done
+                
                 if (!map) {
                     map = L.map('pickerMap').setView([selectedLat, selectedLng], 13);
                     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -944,7 +937,6 @@
                         selectedLng = latlng.lng;
                     });
                 } else {
-                    // Invalidate size to handle modal display issues
                     setTimeout(() => {
                         map.invalidateSize();
                         map.setView([selectedLat, selectedLng], 13);
@@ -970,19 +962,16 @@
             cancelMapBtn.addEventListener('click', closeModal);
 
             selectLocationBtn.addEventListener('click', function() {
-                // Generate Google Maps Embed URL
                 const embedUrl = `https://maps.google.com/maps?q=${selectedLat},${selectedLng}&hl=id&z=16&output=embed`;
                 mapUrlInput.value = embedUrl;
                 updateMapPreview(embedUrl);
                 closeModal();
             });
 
-            // Allow manual input update
             mapUrlInput.addEventListener('change', function() {
                 updateMapPreview(this.value);
             });
 
-            // Close on click outside
             mapModal.addEventListener('click', function(e) {
                 if (e.target === mapModal) closeModal();
             });
@@ -993,27 +982,23 @@
              const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtieWN1bWhtcm5mcnNpbGxrcWJ6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk1ODQxNjIsImV4cCI6MjA4NTE2MDE2Mn0.-gbbN9cpdfsTTUyQ2Q2znF9KXj-KjOzCqlnSEc-wEYE';
              const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
  
-             // Elemen Form
              const form = document.querySelector('.profile-section form');
              const inputDataBtn = document.getElementById('inputDataBtn');
              const updateDataBtn = document.getElementById('updateDataBtn');
              const resetDataBtn = document.getElementById('resetDataBtn');
              const mapPreviewContainer = document.getElementById('mapPreviewContainer');
  
-             // Elemen Modal Notifikasi
              const notificationModal = document.getElementById('notificationModal');
              const notificationMessage = document.getElementById('notificationMessage');
              const closeNotificationBtn = document.getElementById('closeNotificationBtn');
  
              let currentDataId = null;
  
-             // Fungsi bantuan untuk menampilkan modal notifikasi
              function showNotification(message) {
                  notificationMessage.textContent = message;
                  notificationModal.classList.add('active');
              }
  
-             // Fungsi bantuan untuk mendapatkan data form sebagai objek
              function getFormData() {
                  return {
                      nama_lembaga: document.getElementById('nama-lembaga').value,
@@ -1029,7 +1014,6 @@
                  };
              }
  
-             // Fungsi bantuan untuk mengisi form dengan data
              function populateForm(data) {
                  document.getElementById('nama-lembaga').value = data.nama_lembaga || '';
                  document.getElementById('ijin-pendirian').value = data.ijin_pendirian || '';
@@ -1049,7 +1033,6 @@
                  }
              }
  
-             // Memuat data awal dari Supabase
              async function loadInitialData() {
                  try {
                      const { data, error } = await _supabase
@@ -1071,7 +1054,6 @@
                  }
              }
  
-             // Event Listener untuk tombol "Input Data"
              inputDataBtn.addEventListener('click', async (e) => {
                  e.preventDefault();
  
@@ -1103,7 +1085,6 @@
                  }
              });
  
-             // Event Listener untuk tombol "Update"
              updateDataBtn.addEventListener('click', async (e) => {
                  e.preventDefault();
  
@@ -1130,7 +1111,6 @@
                  }
              });
  
-             // Event Listener untuk tombol "Reset"
              resetDataBtn.addEventListener('click', async (e) => {
                  e.preventDefault();
                  
@@ -1157,7 +1137,6 @@
                  }
              });
  
-             // Event Listener untuk Modal Notifikasi
              closeNotificationBtn.addEventListener('click', () => {
                  notificationModal.classList.remove('active');
              });
@@ -1168,7 +1147,6 @@
                  }
              });
  
-             // Inisialisasi
              loadInitialData();
         }
 
@@ -1177,7 +1155,6 @@
             const adminPhoto = sessionStorage.getItem('adminPhoto');
             const adminInitial = sessionStorage.getItem('adminInitial');
 
-            // Cek sesi login, jika tidak ada data, kembalikan ke halaman login
             if (!adminNama) {
                 alert('Sesi Anda telah berakhir atau Anda belum login. Silakan login kembali.');
                 window.location.href = 'index.html';
@@ -1189,14 +1166,12 @@
 
             nameEl.textContent = adminNama;
 
-            // Tampilkan foto jika ada, jika tidak, tampilkan inisial nama
             if (adminPhoto && adminPhoto !== 'null' && adminPhoto !== '') {
                 avatarEl.innerHTML = `<img src="${adminPhoto}" alt="Foto ${adminNama}">`;
             } else {
                 avatarEl.innerHTML = `<span>${adminInitial}</span>`;
             }
 
-            // Tambahkan event listener untuk tombol logout untuk membersihkan sesi
             const logoutBtn = document.querySelector('.logout-btn');
             logoutBtn.addEventListener('click', function() {
                 sessionStorage.clear(); // Hapus semua data sesi saat logout
